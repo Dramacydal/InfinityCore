@@ -615,7 +615,7 @@ bool AuthSocket::_HandleLogonProof()
         stmt->setString(1, socket().getRemoteAddress().c_str());
         stmt->setUInt32(2, GetLocaleByName(_localizationName));
         stmt->setString(3, _os);
-        stmt->setUInt8(4, _build);
+        stmt->setUInt32(4, _build);
         stmt->setString(5, _login);
         LoginDatabase.Execute(stmt);
 

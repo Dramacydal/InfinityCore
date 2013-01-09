@@ -147,7 +147,7 @@ public:
             { "spell_target_position",        SEC_ADMINISTRATOR, true,  &HandleReloadSpellTargetPositionCommand,        "", NULL },
             { "spell_threats",                SEC_ADMINISTRATOR, true,  &HandleReloadSpellThreatsCommand,               "", NULL },
             { "spell_group_stack_rules",      SEC_ADMINISTRATOR, true,  &HandleReloadSpellGroupStackRulesCommand,       "", NULL },
-            { "trinity_string",               SEC_ADMINISTRATOR, true,  &HandleReloadTrinityStringCommand,              "", NULL },
+            { "infinity_string",               SEC_ADMINISTRATOR, true,  &HandleReloadTrinityStringCommand,              "", NULL },
             { "warden_action",                SEC_ADMINISTRATOR, true,  &HandleReloadWardenactionCommand,               "", NULL },
             { "waypoint_scripts",             SEC_ADMINISTRATOR, true,  &HandleReloadWpScriptsCommand,                  "", NULL },
             { "waypoint_data",                SEC_ADMINISTRATOR, true,  &HandleReloadWpCommand,                         "", NULL },
@@ -712,9 +712,9 @@ public:
 
     static bool HandleReloadTrinityStringCommand(ChatHandler* handler, const char* /*args*/)
     {
-        sLog->outInfo(LOG_FILTER_GENERAL, "Re-Loading trinity_string Table!");
+        sLog->outInfo(LOG_FILTER_GENERAL, "Re-Loading infinity_string Table!");
         sObjectMgr->LoadTrinityStrings();
-        handler->SendGlobalGMSysMessage("DB table `trinity_string` reloaded.");
+        handler->SendGlobalGMSysMessage("DB table `infinity_string` reloaded.");
         return true;
     }
 
