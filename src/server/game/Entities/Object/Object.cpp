@@ -352,7 +352,7 @@ void Object::_BuildMovementUpdate(ByteBuffer* data, uint16 flags) const
         data->WriteBit(guid[6]);
         data->WriteBit(guid[7]);
         data->WriteBit(0);//self->m_movementInfo.t_guid);                            // Has transport data
-        data->WriteBit(G3D::fuzzyEq(self->GetOrientation(), 0.0f));             // Has Orientation
+        data->WriteBit(0);//G3D::fuzzyEq(self->GetOrientation(), 0.0f));             // Has Orientation
         if (self->m_movementInfo.t_guid)
         {
             ObjectGuid transGuid = self->m_movementInfo.t_guid;
@@ -384,8 +384,8 @@ void Object::_BuildMovementUpdate(ByteBuffer* data, uint16 flags) const
         if (movementFlags)
             data->WriteBits(movementFlags, 30);
 
-        if (movementFlagsExtra & MOVEMENTFLAG2_INTERPOLATED_TURNING) //wrong i bet
-            data->WriteBit(movementFlags & MOVEMENTFLAG_FALLING);
+        //if (movementFlagsExtra & MOVEMENTFLAG2_INTERPOLATED_TURNING) //wrong i bet
+            //data->WriteBit(movementFlags & MOVEMENTFLAG_FALLING);
     }
 
     if (flags & UPDATEFLAG_GO_TRANSPORT_POSITION)
@@ -486,7 +486,7 @@ void Object::_BuildMovementUpdate(ByteBuffer* data, uint16 flags) const
         data->WriteByteSeq(guid[3]);
         *data << float(self->GetPositionZMinusOffset());
 
-        if (!G3D::fuzzyEq(self->GetOrientation(), 0.0f))
+        if (true)//!G3D::fuzzyEq(self->GetOrientation(), 0.0f))
             *data << float(self->GetOrientation());
 
         *data << self->GetSpeed(MOVE_RUN_BACK);
@@ -496,7 +496,7 @@ void Object::_BuildMovementUpdate(ByteBuffer* data, uint16 flags) const
         *data << self->GetSpeed(MOVE_WALK);
         data->WriteByteSeq(guid[5]);
         //if (true)   // Has time, controlled by bit
-        *data << uint32(getMSTime());
+        *data << uint32(0);//getMSTime());
         *data << self->GetSpeed(MOVE_PITCH_RATE);
         data->WriteByteSeq(guid[2]);
         *data << self->GetSpeed(MOVE_RUN);
