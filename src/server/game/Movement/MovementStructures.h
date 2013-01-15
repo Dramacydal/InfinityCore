@@ -92,7 +92,8 @@ enum MovementStatusElements
     // Special
     MSEZeroBit, // writes bit value 1 or skips read bit
     MSEOneBit,  // writes bit value 0 or skips read bit
-    MSEUnkCount, //writes 0 24 bits length or skips reading 24 bits
+    MSEHasCounter, //writes 0 24 bits length or skips reading 24 bits
+    MSECounter, //reads uint32 based on counter num.
     MSEIsAlive, //unk
     MSEEnd,     // marks end of parsing
     MSE_COUNT
@@ -108,7 +109,7 @@ MovementStatusElements PlayerMoveSequence[] =
     MSEHasGuidByte6,    
     MSEHasMovementFlags2,    
     MSEHasGuidByte7,    
-    MSEUnkCount, 
+    MSEHasCounter, 
     MSEHasGuidByte1,    
     MSEMovementFlags,    
     MSEHasGuidByte4,    
@@ -256,7 +257,7 @@ MovementStatusElements MovementHeartBeatSequence[] =
     MSEPositionZ,
     MSEHasMovementFlags,
     MSEHasFallData,
-    MSEUnkCount,
+    MSEHasCounter,
     MSEIsAlive,
     MSEHasMovementFlags2,
     MSEHasPitch,
@@ -289,7 +290,7 @@ MovementStatusElements MovementHeartBeatSequence[] =
     MSEMovementFlags,
     MSEMovementFlags2,
     MSEGuidByte7,
-    //counter?
+    MSECounter,
     MSEGuidByte1,
     MSEGuidByte3,
     MSEGuidByte0,
@@ -571,7 +572,7 @@ MovementStatusElements MovementStartBackwardSequence[] =
     MSEHasGuidByte5,
     MSEHasGuidByte7,
     MSEHasTimestamp,
-    MSEUnkCount,   
+    MSEHasCounter,   
     MSEHasTransportGuidByte3,
     MSEHasTransportGuidByte1,
     MSEHasTransportTime2,
@@ -591,7 +592,7 @@ MovementStatusElements MovementStartBackwardSequence[] =
     MSEGuidByte1,
     MSEGuidByte5,
     MSEGuidByte2,
-    //counter
+    MSECounter,
     MSEGuidByte7,    
     MSEGuidByte3,
     MSETransportPositionZ,
@@ -644,7 +645,7 @@ MovementStatusElements MovementStartForwardSequence[] =
     MSEZeroBit,
     MSEHasGuidByte7,
     MSEIsAlive,
-    MSEUnkCount,
+    MSEHasCounter,
     MSEHasGuidByte1,
     MSEHasTimestamp,
     MSEHasPitch,
@@ -665,7 +666,7 @@ MovementStatusElements MovementStartForwardSequence[] =
     MSEMovementFlags,
     
     MSEGuidByte1,
-    //counter
+    MSECounter,
     MSEGuidByte0,
     MSEGuidByte4,    
     MSEGuidByte2,
@@ -1006,7 +1007,7 @@ MovementStatusElements MovementStopSequence[] =
     MSEHasOrientation,    
     MSEZeroBit,
     MSEHasSplineElevation,
-    MSEUnkCount,
+    MSEHasCounter,
     MSEHasTimestamp,    
     MSEHasGuidByte4,    
     MSEHasSpline, //not sure  
@@ -1037,7 +1038,7 @@ MovementStatusElements MovementStopSequence[] =
     MSEGuidByte2,    
     MSEGuidByte4,   
     MSEGuidByte3,
-//counter
+    MSECounter,
     MSEGuidByte5,    
     MSEGuidByte0,    
     MSEGuidByte6,
