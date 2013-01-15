@@ -825,7 +825,7 @@ void WorldSession::ReadMovementInfo(WorldPacket& data, MovementInfo* mi)
                 data.ReadBit();
                 break;
             case MSEIsAlive:
-                data.Skip(4);
+                data.read_skip(4);
                 break;
             default:
                 ASSERT(false && "Incorrect sequence element detected at ReadMovementInfo");
@@ -1108,7 +1108,7 @@ void WorldSession::WriteMovementInfo(WorldPacket &data, MovementInfo* mi)
                 data.WriteBits(0, 24);
                 break;
             case MSEIsAlive:
-                data.WriteUInt32(0);
+                data.WriteBit(0);
                 break;
             default:
                 ASSERT(false && "Incorrect sequence element detected at ReadMovementInfo");
