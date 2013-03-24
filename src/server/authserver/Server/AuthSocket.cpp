@@ -433,7 +433,7 @@ bool AuthSocket::_HandleLogonChallenge()
                     sLog->outDebug(LOG_FILTER_NETWORKIO, "database authentication values: v='%s' s='%s'", databaseV.c_str(), databaseS.c_str());
                     
                     // multiply with 2 since bytes are stored as hexstring
-                    if (databaseV.size() != s_BYTE_SIZE * 2 || databaseS.size() != s_BYTE_SIZE * 2 || _build != fields[7].GetUInt8())              
+					if (databaseV.size() != s_BYTE_SIZE * 2 || databaseS.size() != s_BYTE_SIZE * 2 || _build != fields[7].GetUInt16())              
                         _SetVSFields(rI);
                     else
                     {

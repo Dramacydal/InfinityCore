@@ -29,16 +29,27 @@ void WorldSession::SendAuthResponse(uint8 code, bool queued, uint32 queuePos)
         return;
     }
     WorldPacket packet(SMSG_AUTH_RESPONSE, 1 /*bits*/ + 4 + 1 + 4 + 1 + 4 + 1 + 1 + (queued ? 4 : 0));
+    packet << uint8(code);
+    packet.WriteBit(queued);                                     // IsInQueue
     packet.WriteBit(1);                                    // has account info
 
     // account info
-    packet.WriteBits(classresult->GetRowCount(), 25);           // Activation count for classes
+	packet.WriteBits(0, 21);                                // Activate character template windows/button
+    packet.WriteBits(raceresult->GetRowCount(), 23);            // Activation count for races
+
     packet.WriteBit(0);
+    packet.WriteBits(classresult->GetRowCount(), 23);           // Activation count for classes
     packet.WriteBit(0);
-    packet.WriteBits(0, 22);                                // Activate character template windows/button
-    packet.WriteBits(raceresult->GetRowCount(), 25);            // Activation count for races
-    packet.WriteBit(queued);                                     // IsInQueue
+
     packet.FlushBits();
+
+    do
+    {
+        Field* fields = classresult->Fetch();
+
+        packet << fields[0].GetUInt8();
+        packet << fields[1].GetUInt8();
+    } while (classresult->NextRow());
 
     do
     {
@@ -48,22 +59,13 @@ void WorldSession::SendAuthResponse(uint8 code, bool queued, uint32 queuePos)
         packet << fields[0].GetUInt8();
     } while (raceresult->NextRow());
 
-    packet << uint32(0);
-    packet << uint32(0);
+    packet << uint8(Expansion());                          // Unknown, these two show the same
+    packet << uint8(Expansion());                          // Unknown, these two show the same
     packet << uint8(0);
-    packet << uint8(Expansion());                          // Unknown, these two show the same
-    packet << uint8(Expansion());                          // Unknown, these two show the same
-
-    do
-    {
-        Field* fields = classresult->Fetch();
-
-        packet << fields[0].GetUInt8();
-        packet << fields[1].GetUInt8();
-    } while (classresult->NextRow());
-    
     packet << uint32(0);
-    packet << uint8(code);
+    packet << uint32(0);    
+    packet << uint32(0);
+
 
     SendPacket(&packet);
 }

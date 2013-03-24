@@ -189,8 +189,8 @@ int WorldSocket::SendPacket(WorldPacket const& pct)
     if (m_Crypt.IsInitialized())
     {
         uint32 length = pct.size();
-        length <<= 12;
-        length |= ((uint32)pct.GetOpcode() & 0xFFF);
+        length <<= 13;
+        length |= ((uint32)pct.GetOpcode() & 0x1FFF);
 
         header.header[0] = (uint32)(length & 0xFF);
         header.header[1] = (uint32)((length >> 8) & 0xFF);	
@@ -499,8 +499,8 @@ int WorldSocket::handle_input_header (void)
         m_Crypt.DecryptRecv(clientHeader, 4);
 
         uint32 value = *(uint32*)clientHeader;
-        uint32 opcode = value & 0xFFF;
-        uint16 size = (uint16)((value & ~(uint32)0xFFF) >> 12);
+        uint32 opcode = value & 0x1FFF;
+        uint16 size = (uint16)((value & ~(uint32)0xFFF) >> 13);
 
         header.size = size + 4;
         header.cmd = opcode;
@@ -866,16 +866,24 @@ int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
 int WorldSocket::HandleSendAuthSession()
 {
     WorldPacket packet(SMSG_AUTH_CHALLENGE, 37);
-    BigNumber seed1;
-    seed1.SetRand(16 * 8);
-    packet.append(seed1.AsByteArray(16), 16);               // new encryption seeds
+    //BigNumber seed1;
+    //seed1.SetRand(16 * 8);
 
-    BigNumber seed2;
-    seed2.SetRand(16 * 8);
-    packet.append(seed2.AsByteArray(16), 16);               // new encryption seeds
-
-    packet << m_Seed;
     packet << uint8(1);
+
+	for (int32 i = 0; i < 8; i++)
+		packet << uint32(0);
+
+	packet << time(NULL);
+
+    //packet.append(seed1.AsByteArray(16), 16);               // new encryption seeds
+
+    //BigNumber seed2;
+    //seed2.SetRand(16 * 8);
+    //packet.append(seed2.AsByteArray(16), 16);               // new encryption seeds
+
+    //packet << m_Seed;
+
     return SendPacket(packet);
 }
 
