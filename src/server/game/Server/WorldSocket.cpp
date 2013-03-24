@@ -866,23 +866,18 @@ int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
 int WorldSocket::HandleSendAuthSession()
 {
     WorldPacket packet(SMSG_AUTH_CHALLENGE, 37);
-    //BigNumber seed1;
-    //seed1.SetRand(16 * 8);
+	
+	packet << uint8(1);
 
-    packet << uint8(1);
+    BigNumber seed1;
+    seed1.SetRand(16 * 8);
+    packet.append(seed1.AsByteArray(16), 16);               // new encryption seeds
 
-	for (int32 i = 0; i < 8; i++)
-		packet << uint32(0);
+    BigNumber seed2;
+    seed2.SetRand(16 * 8);
+    packet.append(seed2.AsByteArray(16), 16);               // new encryption seeds
 
-	packet << time(NULL);
-
-    //packet.append(seed1.AsByteArray(16), 16);               // new encryption seeds
-
-    //BigNumber seed2;
-    //seed2.SetRand(16 * 8);
-    //packet.append(seed2.AsByteArray(16), 16);               // new encryption seeds
-
-    //packet << m_Seed;
+    packet << m_Seed;
 
     return SendPacket(packet);
 }
