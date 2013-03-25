@@ -866,8 +866,8 @@ int WorldSocket::ProcessIncoming(WorldPacket* new_pct)
 int WorldSocket::HandleSendAuthSession()
 {
     WorldPacket packet(SMSG_AUTH_CHALLENGE, 37);
-	
-	packet << uint8(1);
+    packet << uint16(0);
+    packet << uint8(1);
 
     BigNumber seed1;
     seed1.SetRand(16 * 8);
@@ -930,7 +930,6 @@ int WorldSocket::HandleAuthSession(WorldPacket& recvPacket)
     addonsData.resize(addonSize);
     recvPacket.read((uint8*)addonsData.contents(), addonSize);
 
-    recvPacket.ReadBit();
     uint32 accountNameLength = recvPacket.ReadBits(12);
     account = recvPacket.ReadString(accountNameLength);
 

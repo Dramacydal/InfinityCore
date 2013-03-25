@@ -26,15 +26,13 @@
 
 namespace AccountMgr
 {
-    AccountOpResult CreateAccount(std::string username, std::string password, std::string email, std::string emailpassword)
+    AccountOpResult CreateAccount(std::string username, std::string password, std::string email)
     {
         if (utf8length(username) > MAX_ACCOUNT_STR)
             return AOR_NAME_TOO_LONG;                           // username's too long
 
         normalizeString(username);
         normalizeString(password);
-        normalizeString(email);
-        normalizeString(emailpassword);  
         normalizeString(email);
 
         if (GetId(username))

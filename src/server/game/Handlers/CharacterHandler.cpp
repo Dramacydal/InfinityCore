@@ -226,7 +226,7 @@ void WorldSession::HandleCharEnum(PreparedQueryResult result)
     ByteBuffer bitBuffer;
     ByteBuffer dataBuffer;
 
-    bitBuffer.WriteBits(0, 23);
+    bitBuffer.WriteBits(0, 21);
     if (result)
     {
         _allowedCharsToLogin.clear();
@@ -235,7 +235,7 @@ void WorldSession::HandleCharEnum(PreparedQueryResult result)
         bitBuffer.reserve(24 * charCount / 8);
         dataBuffer.reserve(charCount * 381);
 
-        bitBuffer.WriteBits(charCount, 17);
+        bitBuffer.WriteBits(charCount, 16);
 
         do
         {
@@ -252,7 +252,7 @@ void WorldSession::HandleCharEnum(PreparedQueryResult result)
     }
     else
     {
-        bitBuffer.WriteBits(0, 17);
+        bitBuffer.WriteBits(0, 16);
         bitBuffer.WriteBit(1);
         bitBuffer.FlushBits();
     }
@@ -289,10 +289,10 @@ void WorldSession::HandleCharCreateOpcode(WorldPacket& recvData)
     uint8 race_, class_;
     uint8 gender, skin, face, hairStyle, hairColor, facialHair, outfitId;    
 
-    recvData >> class_ >> hairStyle >> facialHair >> race_;
-    recvData >> face >> skin >> gender >> hairColor >> outfitId;
-    recvData.ReadBit();
-    uint32 nameLength = recvData.ReadBits(7);
+    recvData >> outfitId >> facialHair >> skin >> hairStyle;
+    recvData >> gender >> hairColor >> race_ >> class_ >> face;
+
+    uint32 nameLength = recvData.ReadBits(6);
     std::string name = recvData.ReadString(nameLength);
 
     WorldPacket data(SMSG_CHAR_CREATE, 1);                  // returned with diff.values in all cases
@@ -703,8 +703,25 @@ void WorldSession::HandleCharCreateCallback(PreparedQueryResult result, Characte
 
 void WorldSession::HandleCharDeleteOpcode(WorldPacket& recvData)
 {
-    uint64 guid;
-    recvData >> guid;
+    ObjectGuid guid;
+
+    guid[7] = recvData.ReadBit();
+    guid[2] = recvData.ReadBit();
+    guid[5] = recvData.ReadBit();
+    guid[6] = recvData.ReadBit();
+    guid[3] = recvData.ReadBit();
+    guid[4] = recvData.ReadBit();
+    guid[0] = recvData.ReadBit();
+    guid[1] = recvData.ReadBit();
+
+    recvData.ReadByteSeq(guid[2]);
+    recvData.ReadByteSeq(guid[6]);
+    recvData.ReadByteSeq(guid[1]);
+    recvData.ReadByteSeq(guid[4]);
+    recvData.ReadByteSeq(guid[3]);
+    recvData.ReadByteSeq(guid[0]);
+    recvData.ReadByteSeq(guid[7]);
+    recvData.ReadByteSeq(guid[5]);
 
     // can't delete loaded character
     if (ObjectAccessor::FindPlayer(guid))
@@ -781,23 +798,25 @@ void WorldSession::HandlePlayerLoginOpcode(WorldPacket& recvData)
 
     sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd Player Logon Message");
 
-    playerGuid[5] = recvData.ReadBit();
-    playerGuid[7] = recvData.ReadBit();
-    playerGuid[0] = recvData.ReadBit();
-    playerGuid[1] = recvData.ReadBit();
-    playerGuid[2] = recvData.ReadBit();
-    playerGuid[3] = recvData.ReadBit();
-    playerGuid[4] = recvData.ReadBit();
-    playerGuid[6] = recvData.ReadBit();
+    recvData.read_skip<float>();//unk float
 
-    recvData.ReadByteSeq(playerGuid[6]);
-    recvData.ReadByteSeq(playerGuid[4]);
-    recvData.ReadByteSeq(playerGuid[3]);
-    recvData.ReadByteSeq(playerGuid[5]);
-    recvData.ReadByteSeq(playerGuid[0]);
-    recvData.ReadByteSeq(playerGuid[2]);
-    recvData.ReadByteSeq(playerGuid[7]);
+    playerGuid[5] = recvData.ReadBit();
+    playerGuid[0] = recvData.ReadBit();
+    playerGuid[6] = recvData.ReadBit();
+    playerGuid[2] = recvData.ReadBit();
+    playerGuid[1] = recvData.ReadBit();
+    playerGuid[3] = recvData.ReadBit();
+    playerGuid[7] = recvData.ReadBit();
+    playerGuid[4] = recvData.ReadBit();
+
     recvData.ReadByteSeq(playerGuid[1]);
+    recvData.ReadByteSeq(playerGuid[5]);
+    recvData.ReadByteSeq(playerGuid[7]);
+    recvData.ReadByteSeq(playerGuid[0]);
+    recvData.ReadByteSeq(playerGuid[4]);
+    recvData.ReadByteSeq(playerGuid[6]);
+    recvData.ReadByteSeq(playerGuid[3]);
+    recvData.ReadByteSeq(playerGuid[2]);
 
     sLog->outDebug(LOG_FILTER_NETWORKIO, "Character (Guid: %u) logging in", GUID_LOPART(playerGuid));
 
@@ -2232,8 +2251,7 @@ void WorldSession::HandleRandomizeCharNameOpcode(WorldPacket& recvData)
 {
     uint8 gender, race;
 
-    recvData >> gender;
-    recvData >> race;
+    recvData >> race >> gender;
 
     if (!Player::IsValidRace(race))
     {
@@ -2249,7 +2267,8 @@ void WorldSession::HandleRandomizeCharNameOpcode(WorldPacket& recvData)
 
     std::string const* name = GetRandomCharacterName(race, gender);
     WorldPacket data(SMSG_RANDOMIZE_CHAR_NAME, 10);
-    data.WriteBits(name->size(), 15);
+
+    data.WriteBits(name->size(), 14);
     data.WriteBit(1);
     data.FlushBits();
 
