@@ -16871,7 +16871,7 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
     SetFloatValue(UNIT_FIELD_BOUNDINGRADIUS, DEFAULT_WORLD_OBJECT_SIZE);
     SetFloatValue(UNIT_FIELD_COMBATREACH, 1.5f);
     SetFloatValue(UNIT_FIELD_HOVERHEIGHT, 1.0f);
-    SetUInt32Value(PLAYER_FIELD_HOME_PLAYER_REALM, 1);
+    SetUInt32Value(PLAYER_FIELD_HOME_PLAYER_REALM, realmID);
 
     // load achievements before anything else to prevent multiple gains for the same achievement/criteria on every loading (as loading does call UpdateAchievementCriteria)
     m_achievementMgr->LoadFromDB(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_ACHIEVEMENTS), holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_CRITERIA_PROGRESS));

@@ -31,6 +31,7 @@
 #include "WorldPacket.h"
 #include "Cryptography/BigNumber.h"
 #include "Opcodes.h"
+#include "Object.h"
 
 class Creature;
 class GameObject;
@@ -266,7 +267,7 @@ class WorldSession
         void SendAuthWaitQue(uint32 position);
 
         //void SendTestCreatureQueryOpcode(uint32 entry, uint64 guid, uint32 testvalue);
-        void SendNameQueryOpcode(uint64 guid);
+        void SendNameQueryOpcode(ObjectGuid guid, uint32 realmId = realmID);
 
         void SendTrainerList(uint64 guid);
         void SendTrainerList(uint64 guid, std::string const& strTitle);

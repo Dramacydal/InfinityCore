@@ -31,26 +31,43 @@
 #include "Pet.h"
 #include "MapManager.h"
 
-void WorldSession::SendNameQueryOpcode(uint64 guid)
+void WorldSession::SendNameQueryOpcode(ObjectGuid guid, uint32 realmId)
 {
     Player* player = ObjectAccessor::FindPlayer(guid);
     CharacterNameData const* nameData = sWorld->GetCharacterNameData(GUID_LOPART(guid));
 
-    WorldPacket data(SMSG_NAME_QUERY_RESPONSE, (8+1+1+1+1+1+10));
-    data.appendPackGUID(guid);
     if (!nameData)
-    {
-        data << uint8(1);                           // name unknown
-        SendPacket(&data);
         return;
-    }
 
+    WorldPacket data(SMSG_NAME_QUERY_RESPONSE, (8+1+1+1+1+1+10));
+    data.WriteBit(guid[7]);
+    data.WriteBit(guid[3]);
+    data.WriteBit(guid[0]);
+    data.WriteBit(guid[2]);
+    data.WriteBit(guid[1]);
+    data.WriteBit(guid[6]);
+    data.WriteBits(nameData->m_name.length(), 6);
+    data.WriteBit(guid[4]);
+    data.WriteBit(0);
+    data.WriteBit(guid[5]);
+    data.WriteBit(0);
+
+    data.FlushBits();
+
+    data.WriteByteSeq(guid[2]);
+    data.WriteByteSeq(guid[7]);
     data << uint8(0);                               // name known
-    data << nameData->m_name;                       // played name
-    data << uint8(0);                               // realm name - only set for cross realm interaction (such as Battlegrounds)
-    data << uint8(nameData->m_race);
+    data.WriteByteSeq(guid[5]);
+    data.WriteByteSeq(guid[6]);
+    data.WriteByteSeq(guid[4]);
+    data.WriteByteSeq(guid[1]);
     data << uint8(nameData->m_gender);
+    data << uint8(nameData->m_race);
+    data << uint32(realmId);
     data << uint8(nameData->m_class);
+    data.WriteByteSeq(guid[3]);
+    data.WriteByteSeq(guid[0]);
+    data.WriteString(nameData->m_name);             // played name
 
     if (DeclinedName const* names = (player ? player->GetDeclinedNames() : NULL))
     {
@@ -66,13 +83,33 @@ void WorldSession::SendNameQueryOpcode(uint64 guid)
 
 void WorldSession::HandleNameQueryOpcode(WorldPacket& recvData)
 {
-    uint64 guid;
-    recvData >> guid;
+    ObjectGuid guid;
+    uint32 realmId;
+
+    recvData >> realmId;
+
+    guid[2] = recvData.ReadBit();
+    guid[1] = recvData.ReadBit();
+    guid[5] = recvData.ReadBit();
+    guid[7] = recvData.ReadBit();
+    guid[4] = recvData.ReadBit();
+    guid[3] = recvData.ReadBit();
+    guid[6] = recvData.ReadBit();
+    guid[0] = recvData.ReadBit();
+
+    recvData.ReadByteSeq(guid[3]);
+    recvData.ReadByteSeq(guid[2]);
+    recvData.ReadByteSeq(guid[6]);
+    recvData.ReadByteSeq(guid[1]);
+    recvData.ReadByteSeq(guid[0]);
+    recvData.ReadByteSeq(guid[4]);
+    recvData.ReadByteSeq(guid[5]);
+    recvData.ReadByteSeq(guid[7]);
 
     // This is disable by default to prevent lots of console spam
     // sLog->outInfo(LOG_FILTER_NETWORKIO, "HandleNameQueryOpcode %u", guid);
 
-    SendNameQueryOpcode(guid);
+    SendNameQueryOpcode(guid, realmId);
 }
 
 void WorldSession::HandleQueryTimeOpcode(WorldPacket & /*recvData*/)

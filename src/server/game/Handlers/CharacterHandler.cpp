@@ -801,8 +801,8 @@ void WorldSession::HandlePlayerLoginOpcode(WorldPacket& recvData)
     recvData.read_skip<float>();//unk float
 
     playerGuid[5] = recvData.ReadBit();
-    playerGuid[0] = recvData.ReadBit();
     playerGuid[6] = recvData.ReadBit();
+    playerGuid[0] = recvData.ReadBit();
     playerGuid[2] = recvData.ReadBit();
     playerGuid[1] = recvData.ReadBit();
     playerGuid[3] = recvData.ReadBit();
