@@ -39,14 +39,14 @@ void WorldSession::SendNameQueryOpcode(ObjectGuid guid, uint32 realmId)
     if (!nameData)
         return;
 
-    WorldPacket data(SMSG_NAME_QUERY_RESPONSE, (8+1+1+1+1+1+10));
+    WorldPacket data(SMSG_NAME_QUERY_RESPONSE);
     data.WriteBit(guid[7]);
     data.WriteBit(guid[3]);
     data.WriteBit(guid[0]);
     data.WriteBit(guid[2]);
     data.WriteBit(guid[1]);
     data.WriteBit(guid[6]);
-    data.WriteBits(nameData->m_name.length(), 6);
+    data.WriteBits(nameData->m_name.size(), 6);
     data.WriteBit(guid[4]);
     data.WriteBit(0);
     data.WriteBit(guid[5]);
@@ -75,8 +75,8 @@ void WorldSession::SendNameQueryOpcode(ObjectGuid guid, uint32 realmId)
         for (uint8 i = 0; i < MAX_DECLINED_NAME_CASES; ++i)
             data << names->name[i];
     }
-    else
-        data << uint8(0);                           // Name is not declined
+    //else
+        //data << uint8(0);                           // Name is not declined
 
     SendPacket(&data);
 }
@@ -92,8 +92,8 @@ void WorldSession::HandleNameQueryOpcode(WorldPacket& recvData)
     guid[1] = recvData.ReadBit();
     guid[5] = recvData.ReadBit();
     guid[7] = recvData.ReadBit();
-    guid[4] = recvData.ReadBit();
     guid[3] = recvData.ReadBit();
+    guid[4] = recvData.ReadBit();
     guid[6] = recvData.ReadBit();
     guid[0] = recvData.ReadBit();
 
@@ -110,6 +110,35 @@ void WorldSession::HandleNameQueryOpcode(WorldPacket& recvData)
     // sLog->outInfo(LOG_FILTER_NETWORKIO, "HandleNameQueryOpcode %u", guid);
 
     SendNameQueryOpcode(guid, realmId);
+}
+
+void WorldSession::HandleRealmNameQueryOpcode(WorldPacket& recvData)
+{
+    uint32 realmId;
+    std::string name;
+
+    recvData >> realmId;
+
+    QueryResult result = LoginDatabase.PQuery("SELECT name FROM realmlist WHERE id='%u'", realmId);
+    if (!result)
+        return;
+    
+    Field* fields = result->Fetch();
+    name = fields[0].GetString();
+
+    WorldPacket data(SMSG_REALM_QUERY);
+    data << uint8(0);
+    data << realmId;
+    data.WriteBits(name.length(), 8);
+    data.WriteBits(name.length(), 8);
+    data.WriteBit(1);
+
+    data.FlushBits();
+
+    data.WriteString(name);
+    data.WriteString(name);
+
+    SendPacket(&data);
 }
 
 void WorldSession::HandleQueryTimeOpcode(WorldPacket & /*recvData*/)

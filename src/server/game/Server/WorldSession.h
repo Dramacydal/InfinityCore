@@ -484,6 +484,7 @@ class WorldSession
         void HandleGameobjectReportUse(WorldPacket& recvPacket);
 
         void HandleNameQueryOpcode(WorldPacket& recvPacket);
+        void HandleRealmNameQueryOpcode(WorldPacket& recvPacket);
 
         void HandleQueryTimeOpcode(WorldPacket& recvPacket);
 
