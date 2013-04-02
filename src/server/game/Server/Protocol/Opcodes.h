@@ -349,9 +349,9 @@ enum Opcodes
     CMSG_MESSAGECHAT_PARTY                            = 0x1D46,
     CMSG_MESSAGECHAT_RAID                             = 0x2D44,
     CMSG_MESSAGECHAT_RAID_WARNING                     = 0x0944,
-    CMSG_MESSAGECHAT_SAY                              = 0x17EF, //16733
-    CMSG_MESSAGECHAT_WHISPER                          = 0x306, //16357
-    CMSG_MESSAGECHAT_YELL                             = 0xF7F, //16357
+    CMSG_MESSAGECHAT_SAY                              = 0x17EF, //16769
+    CMSG_MESSAGECHAT_WHISPER                          = 0x167F, //16769
+    CMSG_MESSAGECHAT_YELL                             = 0x1AED, //16769
     CMSG_MINIGAME_MOVE                                = 0x2A34,
     CMSG_MOUNTSPECIAL_ANIM                            = 0x2807,
     CMSG_MOVE_CHARM_TELEPORT_CHEAT                    = 0x0000,
@@ -416,7 +416,7 @@ enum Opcodes
     CMSG_PLAYED_TIME                                  = 0x0804,
     CMSG_PLAYER_DIFFICULTY_CHANGE                     = 0x0000,
     CMSG_PLAYER_LOGIN                                 = 0x015D, //16733
-    CMSG_PLAYER_LOGOUT                                = 0x0000,
+    CMSG_PLAYER_LOGOUT                                = 0x0359,
     CMSG_PLAYER_VEHICLE_ENTER                         = 0x2705,
     CMSG_PLAY_DANCE                                   = 0x6914,
     CMSG_PUSHQUESTTOPARTY                             = 0x4B14,
@@ -619,7 +619,7 @@ enum Opcodes
     MSG_MOVE_START_ASCEND                             = 0x390A,
     MSG_MOVE_START_BACKWARD                           = 0x37A, //16357
     MSG_MOVE_START_DESCEND                            = 0x3800,
-    MSG_MOVE_START_FORWARD                            = 0x0FE, //16357
+    MSG_MOVE_START_FORWARD                            = 0x1819, //16357
     MSG_MOVE_START_PITCH_DOWN                         = 0x3908,
     MSG_MOVE_START_PITCH_UP                           = 0x3304,
     MSG_MOVE_START_STRAFE_LEFT                        = 0x3A16,
@@ -1323,7 +1323,7 @@ enum Opcodes
     SMSG_SUMMON_REQUEST                               = 0x2A07,
     SMSG_SUPERCEDED_SPELL                             = 0x5D8, //16357
     SMSG_SUPPRESS_NPC_GREETINGS                       = 0x2FC, //16357
-    SMSG_SUSPEND_COMMS                                = 0x4140,
+    SMSG_SUSPEND_COMMS                                = 0xC3B, //16769
     SMSG_SUSPEND_TOKEN_RESPONSE                       = 0xB5C, //16357
     SMSG_TALENTS_ERROR                                = 0x0916,
     SMSG_TALENTS_INFO                                 = 0x6F26,
