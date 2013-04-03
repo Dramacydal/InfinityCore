@@ -2,7 +2,7 @@
 SQLyog Enterprise - MySQL GUI v8.18 
 MySQL - 5.5.30-1~dotdeb.0 : Database - auth
 *********************************************************************
-*/
+*/
 
 /*!40101 SET NAMES utf8 */;
 
@@ -211,6 +211,8 @@ CREATE TABLE `realm_classes` (
   PRIMARY KEY (`realmId`,`class`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+insert  into `realm_classes`(`realmId`,`class`,`expansion`) values (9,1,0),(9,2,0),(9,3,0),(9,4,0),(9,5,0),(9,6,2),(9,7,0),(9,8,0),(9,9,0),(9,10,4),(9,11,0);
+
 /*Table structure for table `realm_races` */
 
 DROP TABLE IF EXISTS `realm_races`;
@@ -221,6 +223,8 @@ CREATE TABLE `realm_races` (
   `expansion` tinyint(4) NOT NULL COMMENT 'Expansion for race activation',
   PRIMARY KEY (`realmId`,`race`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+insert  into `realm_races`(`realmId`,`race`,`expansion`) values (9,1,0),(9,2,0),(9,3,0),(9,4,0),(9,5,0),(9,6,0),(9,7,0),(9,8,0),(9,9,3),(9,10,1),(9,11,1),(9,22,3),(9,24,4),(9,25,4),(9,26,4);
 
 /*Table structure for table `realmcharacters` */
 

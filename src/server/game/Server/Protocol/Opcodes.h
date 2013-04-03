@@ -1111,7 +1111,7 @@ enum Opcodes
     SMSG_MOVE_UPDATE_WALK_SPEED                       = 0x3B8, //16357
     SMSG_MOVE_WATER_WALK                              = 0x21C, //16357
     SMSG_MULTIPLE_PACKETS                             = 0x6736,
-    SMSG_NAME_QUERY_RESPONSE                          = 0x03E0, //16733
+    SMSG_NAME_QUERY_RESPONSE                          = 0x03E0, //16769
     SMSG_NEW_TAXI_PATH                                = 0x4B35,
     SMSG_NEW_WORLD                                    = 0x81D, //16357
     SMSG_NEW_WORLD_ABORT                              = 0x14B7,
@@ -1209,7 +1209,7 @@ enum Opcodes
     SMSG_RAID_MARKERS_CHANGED                         = 0x930, //16357
     SMSG_RAID_READY_CHECK_THROTTLED_ERROR             = 0x2607,
     SMSG_RAID_SUMMON_FAILED                           = 0x18B6,
-    SMSG_RANDOMIZE_CHAR_NAME                          = 0xB74,  //16357
+    SMSG_RANDOMIZE_CHAR_NAME                          = 0x02B5,  //16769
     SMSG_RATED_BG_RATING                              = 0x935, //16357
     SMSG_RATED_BG_STATS                               = 0x418, //16357
     SMSG_READ_ITEM_FAILED                             = 0x0F16,
