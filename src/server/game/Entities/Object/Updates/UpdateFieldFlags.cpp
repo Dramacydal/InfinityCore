@@ -185,6 +185,7 @@ uint32 UnitUpdateFieldFlags[PLAYER_END] =
     UF_FLAG_PUBLIC,            //CGUnitData::createdBy,2
     UF_FLAG_PUBLIC,            //CGUnitData::target,2
     UF_FLAG_PUBLIC,            //CGUnitData::target,2
+    UF_FLAG_PUBLIC,            //CGUnitData::BATTLE_PET_COMPANION_GUID
     UF_FLAG_PUBLIC,            //CGUnitData::channelObject,2
     UF_FLAG_PUBLIC,            //CGUnitData::channelObject,2
     UF_FLAG_PUBLIC,            //CGUnitData::summonedByHomeRealm,1
@@ -214,6 +215,7 @@ uint32 UnitUpdateFieldFlags[PLAYER_END] =
     UF_FLAG_PRIVATE | UF_FLAG_OWNER | UF_FLAG_UNITALL,            //CGUnitData::powerRegenInterruptedFlatModifier,5
     UF_FLAG_PRIVATE | UF_FLAG_OWNER | UF_FLAG_UNITALL,            //CGUnitData::powerRegenInterruptedFlatModifier,5
     UF_FLAG_PUBLIC,            //CGUnitData::level,1
+    UF_FLAG_PUBLIC,            //GCUnitData::EFFECTIVE_LEVEL
     UF_FLAG_PUBLIC,            //CGUnitData::factionTemplate,1
     UF_FLAG_PUBLIC,            //CGUnitData::virtualItemID,3
     UF_FLAG_PUBLIC,            //CGUnitData::virtualItemID,3

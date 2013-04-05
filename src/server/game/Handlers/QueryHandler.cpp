@@ -159,6 +159,9 @@ void WorldSession::HandleCreatureQueryOpcode(WorldPacket& recvData)
 {
     uint32 entry;
     recvData >> entry;
+    
+    WorldPacket data(SMSG_CREATURE_QUERY_RESPONSE);
+    data << uint32(entry);                              // creature entry  
 
     CreatureTemplate const* ci = sObjectMgr->GetCreatureTemplate(entry);
     if (ci)
@@ -177,9 +180,6 @@ void WorldSession::HandleCreatureQueryOpcode(WorldPacket& recvData)
             }
         }
         sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_CREATURE_QUERY '%s' - Entry: %u.", ci->Name.c_str(), entry);
-
-        WorldPacket data(SMSG_CREATURE_QUERY_RESPONSE);
-        data << uint32(entry);                              // creature entry  
 
         data.WriteBit(1);//has data
         data.WriteBits(8, 22);//questitems
@@ -219,19 +219,14 @@ void WorldSession::HandleCreatureQueryOpcode(WorldPacket& recvData)
         data << uint32(ci->Modelid4);                       // Modelid4
         data << uint32(ci->KillCredit[1]);                  // new in 3.1, kill credit
         data << uint32(ci->expansion);                      // Expansion Required
-
-        SendPacket(&data);
-        sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_CREATURE_QUERY_RESPONSE");
     }
     else
     {
-        sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_CREATURE_QUERY - NO CREATURE INFO! (GUID: %u, ENTRY: %u)",
-            GUID_LOPART(guid), entry);
-        WorldPacket data(SMSG_CREATURE_QUERY_RESPONSE, 1);
+        sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_CREATURE_QUERY - NO CREATURE INFO! (ENTRY: %u)", entry);
         data.WriteBit(0);
-        SendPacket(&data);
-        sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_CREATURE_QUERY_RESPONSE");
-    }
+    } 
+    SendPacket(&data);
+    sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Sent SMSG_CREATURE_QUERY_RESPONSE");
 }
 
 /// Only _static_ data is sent in this packet !!!
@@ -280,8 +275,8 @@ void WorldSession::HandleGameObjectQueryOpcode(WorldPacket& recvData)
     }
     else
     {
-        sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_GAMEOBJECT_QUERY - Missing gameobject info for (GUID: %u, ENTRY: %u)",
-            GUID_LOPART(guid), entry);
+        //sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: CMSG_GAMEOBJECT_QUERY - Missing gameobject info for (GUID: %u, ENTRY: %u)",
+            //GUID_LOPART(guid), entry);
         WorldPacket data (SMSG_GAMEOBJECT_QUERY_RESPONSE, 4);
         data << uint32(entry | 0x80000000);
         SendPacket(&data);
